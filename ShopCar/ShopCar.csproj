@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-ShopCar-97b48089-4544-4fc8-9090-f85df7ea2eb1</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.2" />
+    <PackageReference Include="jQuery.UI.Core" Version="1.8.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="RoxyFileman-1.4.5-net\fileman\aspnet_client\system_web\2_0_50727\" />
+    <Folder Include="RoxyFileman-1.4.5-net\fileman\aspnet_client\system_web\4_0_30319\" />
+    <Folder Include="RoxyFileman-1.4.5-net\fileman\tmp\" />
+    <Folder Include="RoxyFileman-1.4.5-net\fileman\Uploads\Documents\" />
+    <Folder Include="RoxyFileman-1.4.5-net\fileman\Uploads\FLV\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Content\ajax-loader.gif" />
+  </ItemGroup>
+
+</Project>

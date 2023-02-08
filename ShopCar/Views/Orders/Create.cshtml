@@ -1,0 +1,54 @@
+﻿@model ShopCar.Models.Order
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Order</h4>
+<hr />
+@if(TempData.Peek("ErrorOrder") != null)
+    {
+    <div class="alert alert-success">
+        <p>
+            @TempData["ErrorOrder"]
+        </p>
+
+    </div>
+
+    }
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class ="form-control" asp-items="ViewBag.EmployeeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MyDate" class="control-label"></label>
+                <input asp-for="MyDate" class="form-control" />
+                <span asp-validation-for="MyDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+            </div>
+        <dd class="col-sm-10">
+                @await Html.PartialAsync("ViewProducts",(List<Product>)ViewBag.Products)
+        </dd>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

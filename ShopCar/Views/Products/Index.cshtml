@@ -1,0 +1,179 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<ShopCar.Models.Product>
+@*@using X.PagedList.Mvc.Bootstrap4.Core;*@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
+@if(ViewBag.Hidding)
+    {
+    <div classs="new-cat">
+        <div class="inputbtn-group mb-3" style="display:flex">
+            <div class="input-group-text">
+
+                <a class="btn btn-primary" entity="Products" id="newcata" asp-action="Create">Create New Product</a>
+                <span class="ajax-text">
+
+                    <img src="~/content/ajax-loader.gif" height="50" />
+                </span>
+            </div>
+
+            @if(TempData.Peek("ErrorProduct") != null)
+    {
+    <div class="alert alert-success">
+        <p>
+                        @TempData["ErrorProduct"]
+                    </p>
+
+    </div>
+
+    }
+            
+        </div>
+
+    </div>
+    }
+
+
+
+
+@*<select  name="SelectCategory">
+
+    <option value="0">All </option>
+    @foreach(var item in ViewBag.Category)
+        {
+        if(ViewBag.SelectedCat == item.Value)
+
+            {
+            <option selected="selected" value="@item.Value"> @item.Text  </option>
+            }
+        else
+            {
+            <option value="@item.Value"> @item.Text </option>
+            }
+        }
+
+    )
+</select>*@
+
+
+
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        @* @Html.PagedListPager((IPagedList)ViewBag.products,page=>Url.Action("Index1","Products",new{page=page})/*, Bootstrap4PagedListRenderOptions.ClassicPlusFirstAndLast*/)*@
+        @* <pager class="pager-container" list="@Model" options="@PagedListRenderOptions.TwitterBootstrapPager" asp-action="Index1" asp-controller="Products" />*@
+    </div>
+</div>
+
+<table class="table sorting d-grid " id="pages">
+    <thead>
+        <tr>
+            <th >
+                @Html.DisplayNameFor(model => model.Name)
+                <br>
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="Name" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Name" asp-route-asc="false">Desc</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sale)
+                <br>
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="Sale" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Sale" asp-route-asc="false">Desc</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+                <br>
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="Category" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Category" asp-route-asc="false">Desc</a>
+            </th>
+            <th >
+                @Html.DisplayNameFor(model => model.About)
+                <br>
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="About" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="About" asp-route-asc="false">Desc</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reviews)
+                <br>
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="Reviews" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Reviews" asp-route-asc="false">Desc</a>
+
+            </th>
+           
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@foreach (var item in Model) {
+        <tr id="id_@item.Id" class="@item.Name">
+            <td>
+                                        <span class="ui-icon ui-icon-disk">  </span>                
+
+                    @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sale)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.Raw(item.About)
+            </td>
+               
+            <td>
+                @Html.Raw(item.Reviews)
+            </td>
+            
+            
+            <td>
+
+                    @if(ViewBag.Hidding)
+                        {
+                        string slash = " | ";
+                        <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                        @slash;
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @slash;
+                        <a class="delete btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+
+                    else
+                        {
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        }
+
+
+           
+
+            </td>
+        </tr>
+}
+      
+
+    </tbody>
+</table>
+
+

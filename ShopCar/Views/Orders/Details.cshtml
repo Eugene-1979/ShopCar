@@ -1,0 +1,56 @@
+﻿@model ShopCar.Models.Order
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Employee)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Employee.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MyDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MyDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Email)
+        </dd>
+        <dt class="col-sm-2">
+           @* @Html.Display("Enrollments")*@
+            Enrollments
+        </dt>
+        <dd class="col-sm-10">
+            @await Html.PartialAsync("~/Views/Enrollments/ViewEnrollment.cshtml",(List<Enrollment>)ViewBag.Enrollment)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if(ViewBag.Hidding)
+    {
+        string slash = " | ";
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    @slash
+    } 
+
+
+    <a asp-action="Index">Back to List</a>
+</div>

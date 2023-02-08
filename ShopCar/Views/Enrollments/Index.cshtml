@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ShopCar.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "Enrollment";
+}
+
+<h1>Index</h1>
+
+
+@if(ViewBag.Hidding)
+    {
+    <div classs="new-cat">
+        <div class="inputbtn-group mb-3" style="display:flex">
+            <div class="input-group-text">
+
+                <a class="btn btn-primary" entity="Enrollments" id="newcata" asp-action="Create">Create New Product</a>
+                <span class="ajax-text">
+
+                    <img src="~/content/ajax-loader.gif" height="50" />
+                </span>
+            </div>
+            @if(TempData.Peek("ErrorEnrollment") != null)
+                {
+                <div class="alert alert-success">
+                    <p>
+                        @TempData["ErrorEnrollment"]
+                    </p>
+
+                </div>
+
+                }
+        </div>
+
+    </div>
+    }
+
+
+<table class="table sorting" id="pages">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            <tr >
+            <td>
+                    <span class="ui-icon ui-icon-disk">  </span>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+
+                    @if(ViewBag.Hidding)
+                        {
+                        string slash = " | ";
+                        @Html.ActionLink("Edit", "Edit", new { @class="btn btn-success" })
+                        @slash;
+                        @Html.ActionLink("Details", "Details", new { @class="btn btn-info"}) 
+                @slash;
+                        @Html.ActionLink("Delete", "Delete", new { @class="btn btn-danger"})
+
+
+                        }
+
+                    else
+                        {
+                        @Html.ActionLink("Details", "Details", new { @class="btn btn-info"})
+                        }
+
+
+                   
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

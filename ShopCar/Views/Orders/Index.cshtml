@@ -1,0 +1,107 @@
+﻿@model IEnumerable<ShopCar.Models.Order>
+
+@{
+    ViewData["Title"] = "Order";
+}
+
+<h1>Order</h1>
+
+
+@if(ViewBag.Hidding)
+    {
+    <div classs="new-cat">
+        <div class="inputbtn-group mb-3" style="display:flex">
+            <div class="input-group-text">
+
+                <a class="btn btn-primary" entity="Orders" id="newcata" asp-action="Create">Create New Product</a>
+                <span class="ajax-text">
+
+                    <img src="~/content/ajax-loader.gif" height="50" />
+                </span>
+            </div>
+
+            @if(TempData.Peek("ErrorOrder") != null)
+                {
+  <div class="alert alert-success">
+                <p>
+                    @TempData["ErrorOrder"]
+                </p>
+
+            </div>
+                }
+          
+
+       
+        </div>
+
+    </div>
+    }
+
+
+
+
+
+
+
+<table class="table sorting" id="pages">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="Employee" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Employee" asp-route-asc="false">Desc</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MyDate)
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="MyDate" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="MyDate" asp-route-asc="false">Desc</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+                <a class="btn btn-success" asp-action="Sorting" asp-route-str="Customer" asp-route-asc="true">Asc</a>
+                <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Customer" asp-route-asc="false">Desc</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            <tr id="id_@item.Id" class="@item.Id">
+            <td>
+                    <span class="ui-icon ui-icon-disk">  </span>
+                @Html.DisplayFor(modelItem => item.Employee.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MyDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.Name)
+            </td>
+            <td>
+
+                    @if(ViewBag.Hidding)
+                        {
+                        string slash = " | ";
+
+  <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        @slash;
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @slash
+                        ;
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+
+                        }
+
+                    else
+                        {
+ <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                        }
+
+
+                  
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

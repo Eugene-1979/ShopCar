@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ShopCar.Models.Enrollment>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.About)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Sale)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.MyDate)
+
+            </th>
+            <th>
+                @Html.Display("Count")
+                </th>
+
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+                <td>
+                    @Html.Raw(item.Product.About)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Sale)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.MyDate)
+                </td>
+        </tr>
+}
+    </tbody>
+</table>
