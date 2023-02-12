@@ -33,13 +33,22 @@
             @Html.DisplayNameFor(model => model.About)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.About)
+            @Html.Raw(Model.About)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Reviews)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Reviews)
+            @Html.Raw(Model.Reviews)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Photos)
+        </dt>
+        <dd class="col-sm-10">
+            @if(@Model.Photos != null)
+                {
+                        <img class="form-control" id="imgpreview" src="\Content\Products\@Model.Name\@Model.Photos" />
+                }
         </dd>
     </dl>
     

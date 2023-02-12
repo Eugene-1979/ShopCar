@@ -9,6 +9,8 @@ using ShopCar.Db;
 using ShopCar.Models;
 using ShopCar.MyUtils;
 using ShopCar.Repository;
+using X.PagedList;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ShopCar.Controllers
 {
@@ -22,11 +24,26 @@ namespace ShopCar.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, int? catId)
         {
             ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
 
-            return View(await _orderRepository.ModelAllAsync());
+            var pageNumber = page ?? 1;
+
+
+            var listProd = (await _orderRepository.ModelAllAsync()).
+            Where(q => catId == null || catId == 0 || q.EmployeeId == catId).ToList();
+
+            ViewBag.Category = new SelectList(
+            _orderRepository._context.Employees.ToList(), "Id", "Name");
+
+            ViewBag.SelectedCat = catId.ToString();
+            IPagedList<Order> products = listProd.ToPagedList(pageNumber, Setting.Pages);
+           
+
+
+
+            return View(products);
         }
 
         // GET: Orders/Details/5
@@ -180,13 +197,37 @@ namespace ShopCar.Controllers
           /*  Создаём метод сортировки*/
      /* Get*/
     
-        public async Task<IActionResult> Sorting(string str,bool asc)
+        public async Task<IActionResult> Sorting(string str,bool asc, int? catId = null)
             {
+            if(catId != null)
+                {
+                return RedirectToAction("Index", new { catId = catId });
+                }
+
+
             var orders= _orderRepository._context.Orders
             .Include(q=>q.Customer).Include(q=>q.Employee);
             ICollection<Order> ordersort = orders.MySorting(str, asc);      
             ViewBag.Hidding= ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
-            return  View("Index", ordersort);
+
+
+           
+
+
+       
+
+            ViewBag.Category = new SelectList(
+            _orderRepository._context.Employees.ToList(), "Id", "Name");
+
+            ViewBag.SelectedCat = "0";
+            IPagedList<Order> products = ordersort.ToPagedList(1, Setting.PagesSort);
+            ViewBag.products = products;
+
+
+
+
+
+            return  View("Index", products);
                 }
 
 

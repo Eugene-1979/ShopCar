@@ -56,10 +56,10 @@ namespace ShopCar.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -154,6 +154,9 @@ namespace ShopCar.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Photos")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Reviews")
                         .IsRequired()

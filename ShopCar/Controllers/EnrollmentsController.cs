@@ -9,6 +9,7 @@ using ShopCar.Db;
 using ShopCar.Models;
 using ShopCar.MyUtils;
 using ShopCar.Repository;
+using X.PagedList;
 
 namespace ShopCar.Controllers
 {
@@ -22,13 +23,24 @@ namespace ShopCar.Controllers
         }
 
         // GET: Enrollments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, int? catId)
         {
 
             ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
 
-            return View(await _enrollmentRepository.ModelAllAsync());
-        }
+            var pageNumber = page ?? 1;
+
+            var listCategory = await _enrollmentRepository.ModelAllAsync();
+            IPagedList<Enrollment> categories = listCategory.ToPagedList(pageNumber, Setting.Pages);
+
+
+
+
+            return categories != null ?
+
+              View(categories) :
+                            Problem("Entity set 'AppDbContent.Emploee'  is null.");
+            }
 
         // GET: Enrollments/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -172,7 +184,10 @@ namespace ShopCar.Controllers
             var enrollments = _enrollmentRepository._context.Enrollment;
             ICollection<Enrollment> enrollmentssort = enrollments.MySorting(str, asc);
             ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
-            return View("Index", enrollmentssort);
+
+
+            IPagedList<Enrollment> categoriesnew = enrollmentssort.ToPagedList(1, Setting.PagesSort);
+            return View("Index", categoriesnew);
             }
 
 

@@ -56,7 +56,19 @@ namespace ShopCar.Repository
 
         public (bool, string) CheckModel(Customer model, string method)
             {
-            throw new NotImplementedException();
+
+            if(method.Equals("Create"))
+            {
+            if(_context.Customers.ToList().Select(q=>q.Email).Any(q=>q==model.Email)) return (false, $"No Create Customer  Email-  {model.Email}  is Exist");
+            if(_context.Customers.ToList().Select(q=>q.Phone).Any(q=>q==model.Phone)) return (false, $"No Create Customer Phone-  {model.Phone} is Exist");
+                
+
+            }
+            
+            
+      
+
+            return (true, $"{method} ok in {model.Name}");
             }
 
 

@@ -23,7 +23,7 @@ namespace ShopCar.Repository
             await _context.SaveChangesAsync();
         }
 
-        async public Task<IEnumerable<Product>> ModelAllAsync() => await _context.Products.Include(p => p.Category).ToListAsync();
+        async public Task<IEnumerable<Product>> ModelAllAsync() => await _context.Products./*Include(p => p.Category).*/ToListAsync();
 
 
         async public Task ModelDeleteAsync(Product model)
@@ -41,7 +41,7 @@ namespace ShopCar.Repository
       
 
         async public Task<Product> ModelFirstofDefaultAsync(int? id) => await _context.Products
-                .Include(p => p.Category)
+                /*.Include(p => p.Category)*/
                 .FirstOrDefaultAsync(m => m.Id == id);
 
 
@@ -60,7 +60,6 @@ namespace ShopCar.Repository
 
             if (model.Sale < ShopRepository._minSale || model.Sale > ShopRepository._maxSale) return  (false,$"incorrect sale in {model.Name}");
             if (method.Equals("Create")&& _context.Products.ToList().Contains(model)) return (false,$"Product {model.Name} is Exist");
-
 
             return  (true,$"{method} ok in {model.Name}");
 
@@ -96,7 +95,7 @@ namespace ShopCar.Repository
         public List<Product> GetAllProducts()
         {
             var query = from b in _context.Products
-                        orderby b.Name
+                     /*   orderby b.Name*/
                         select b;
 
             return query.ToList();
@@ -105,7 +104,7 @@ namespace ShopCar.Repository
         public async Task<List<Product>> GetAllProductsAsync()
         {
             var query = from b in _context.Products
-                        orderby b.Name
+                     /*   orderby b.Name*/
                         select b;
 
             return await query.ToListAsync();

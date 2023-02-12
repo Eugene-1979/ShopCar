@@ -8,29 +8,35 @@ namespace ShopCar.Db
         static Faker faker = new Faker();
         
         public static void Initial(AppDbContent content,
-        int category = 10,
-        int product = 10,
-        int empl = 10,
-        int customer = 10,
-        int order = 10)
+        int category = Setting.category,
+        int product = Setting.product,
+        int empl = Setting.empl,
+        int customer = Setting.customer,
+        int order = Setting.order
+        )
             {
- string path = "F:\\Projects\\Project\\wwwroot\\image\\Cars\\";
-            string[] files = Directory.GetFiles(path);
+
+
+            var rootPhoto = new DirectoryInfo("F:\\Projects\\Project\\wwwroot\\image");
+
+            var dirCfrs = Path.Combine(rootPhoto.ToString(), "Cars");
+if(!Directory.Exists(dirCfrs)) Directory.CreateDirectory(dirCfrs);
+
+/* string path = "F:\\Projects\\Project\\wwwroot\\image\\Cars\\";
+string[] files1 = Directory.GetFiles(path);*/
+            
+
+            string[] files = Directory.GetFiles(dirCfrs.ToString());
+            
+            
+
+
+
+
           files=  files.Select(q => q.Substring(27)).ToArray();
            
        /*     if(Directory.Exists(path)) { 
              files= Directory.GetFiles(path); }*/
-
-
-
-
-
-
-
-
-
-
-
 
 
             AppDbContent appDbContent = content;
@@ -53,7 +59,7 @@ namespace ShopCar.Db
 
            /*\"\\image\\Cars\\1560838551_1.jpg\"*/
 
-             $"<p><img alt =\"\" src ={files[f.Random.Int(0,files.Length-1)]}  style =\"height:66px; width:100px\"/><br/><!--p--></p>"
+             $"<p><img alt =\"\" src ={files[f.Random.Int(0,files.Length-1)]}  style =\"height:{Setting.sizeY}px; width:{Setting.sizeX}px\"/><br/><!--p--></p>"
 
 
 
@@ -103,13 +109,13 @@ namespace ShopCar.Db
                  foreach(var item in torders)
                 {
                 List<Product> temp = new List<Product>();
-                for(int i = 0; i < product / 4; i++)
+                for(int i = 0; i < product / 3; i++)
                     {
                     Product product1 = tproducts[faker.Random.Int(0, product - 1)];
                     if(!temp.Contains(product1))
                         {
                         temp.Add(product1);
-                        item.Enrollments.Add(new Enrollment() { Product = product1, Count = faker.Random.Int(1, 10000) });
+                        item.Enrollments.Add(new Enrollment() { Product = product1, Count = faker.Random.Int(1, 10) });
                         }
                     }
 
@@ -122,9 +128,12 @@ namespace ShopCar.Db
 
             appDbContent.SaveChanges();
 
-                
 
-           
+            /*---------------------------------Создаём каталог фото----------------------------------------*/
+         var upload=Path.Combine(dirCfrs.ToString(), "Upload");
+              if(!Directory.Exists(upload)) Directory.CreateDirectory(upload) ;
+
+            
             }
         
         }

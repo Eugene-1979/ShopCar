@@ -24,13 +24,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.Name)
+                    <a href="/Orders/Details?id=@item.Id">    @Html.DisplayFor(modelItem => item.Employee.Name)     </a>
+               
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MyDate)
+                    <a href="/Orders/Details?id=@item.Id">  @Html.DisplayFor(modelItem => item.MyDate)       </a>
+               
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.Name)
+                    <a href="/Orders/Details?id=@item.Id">      @Html.DisplayFor(modelItem => item.Customer.Name)    </a>
+              
             </td>
             
         </tr>

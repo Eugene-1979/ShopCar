@@ -37,8 +37,11 @@ namespace ShopCar.Models
         /*   [Remote("CheckEmptyString", "Products")]*/
 
         public string Reviews { get; set; }
-
-        public List<Order> Orders { get; set; } = new List<Order>();
+      
+        public  string ? Photos { get; set; }
+      
+/*        public int Quantity  { get; set; }*/
+    public List<Order> Orders { get; set; } = new List<Order>();
 
         public List<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 

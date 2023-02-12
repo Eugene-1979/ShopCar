@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ShopCar.Db;
 using ShopCar.Models;
 using ShopCar.MyUtils;
 using ShopCar.Repository;
+using X.PagedList;
 
 namespace ShopCar.Controllers
 {
@@ -24,14 +26,29 @@ namespace ShopCar.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, int? catId)
         {
             ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
 
-            return _customerRepository._context.Customers != null ? 
-                          View(await _customerRepository.ModelAllAsync()) :
-                          Problem("Entity set 'AppDbContent.Customers'  is null.");
-        }
+            var pageNumber = page ?? 1;
+
+            var customerString = HttpContext.Session.GetString("customer");
+
+            var custFromSort = (customerString != null) ? JsonConvert.DeserializeObject<List<Customer>>(customerString) : _customerRepository._context.Customers.ToList();
+
+
+
+           /* var listCategory = await _customerRepository.ModelAllAsync();*/
+            IPagedList<Customer> categories = custFromSort.ToPagedList(pageNumber, Setting.Pages);
+
+
+
+
+            return categories != null ?
+
+              View(categories) :
+                            Problem("Entity set 'AppDbContent.Customer'  is null.");
+            }
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -66,13 +83,19 @@ ToList();
        /* [ValidateAntiForgeryToken]*/
         public async Task<IActionResult> Create([Bind("Id,Name,Email,Phone")] Customer customer)
         {
-            if (ModelState.IsValid)
+
+            /*My Validasion*/
+            var temp = _customerRepository.CheckModel(customer, "Create");
+            string value = temp.Item2;
+            TempData["ErrorcUSTOMER"] = value;
+
+            if (ModelState.IsValid && temp.Item1)
             {
 
                 await _customerRepository.ModelAddAsync(customer);
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return RedirectToAction("Index"); /*View("Index");*/
         }
 
         // GET: Customers/Edit/5
@@ -101,7 +124,13 @@ ToList();
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            /*My Validasion*/
+            var temp = _customerRepository.CheckModel(customer, nameof(Edit));
+            string value = temp.Item2;
+            TempData["ErrorCustomer"] = value;
+
+
+            if (ModelState.IsValid && temp.Item1)
             {
                 try
                 {
@@ -121,8 +150,8 @@ ToList();
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
-        }
+            return RedirectToAction("Index");
+            }
 
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -166,10 +195,15 @@ ToList();
 
         public async Task<IActionResult> Sorting(string str, bool asc)
             {
-            var customers = _customerRepository._context.Customers.Include(q=>q.Orders);
+            var customers = _customerRepository._context.Customers;
             ICollection<Customer> customerssort = customers.MySorting(str, asc);
-            ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
-            return View("Index", customerssort);
+         /*   ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
+
+            IPagedList<Customer> categoriesnew = customerssort.ToPagedList(1, Setting.PagesSort);*/
+
+            HttpContext.Session.SetString("customer", JsonConvert.SerializeObject(customerssort));
+            return RedirectToAction("Index");
+         /*   return View("Index", categoriesnew);*/
             }
 
         }

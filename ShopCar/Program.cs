@@ -12,6 +12,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
+builder.Services.AddSession(opt =>
+{
+    opt.Cookie.Name = "ShopCar";
+    opt.Cookie.HttpOnly = true;
+    opt.Cookie.IsEssential = true;
+});
+
+
+
+
+
+
+
+
+
 // добавление сервисов Idenity
 builder.Services.AddDefaultIdentity<IdentityUser>
 (
@@ -109,15 +124,15 @@ app.MapRazorPages();
 
 
 
-
+app.UseSession();
 
 
 using(var scope = app.Services.CreateScope())
 {
-AppDbContent context = scope.ServiceProvider.GetRequiredService<AppDbContent>();
+    AppDbContent context = scope.ServiceProvider.GetRequiredService<AppDbContent>();
 
 
-    if(false) { DbObjects.Initial(context); }
+   /* if(true) { DbObjects.Initial(context); }*/
 
     /*   context.Products.RemoveRange(context.Products);
        context.Categorys.RemoveRange(context.Categorys);

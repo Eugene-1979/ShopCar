@@ -38,13 +38,15 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                
                 @Html.DisplayFor(modelItem => item.Sale)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                @Html.Raw(item.About)
+                    <p><a href="/Products/Details?id=@item.Id"> @Html.Raw(item.About)        </a></p>
+            
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Reviews)

@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ShopCar.Db;
 using ShopCar.Models;
 using ShopCar.MyUtils;
 using ShopCar.Repository;
+using X.PagedList;
 
 namespace ShopCar.Controllers
     {
@@ -26,17 +28,31 @@ namespace ShopCar.Controllers
             }
 
         // GET: Categories
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? page, int? catId)
             {
 
             ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
-        
-        /*    var t=  await _categoryRepository.ModelAllAsync();*/
-            var t = _categoryRepository._context.Categorys;
 
-            return _categoryRepository._context.Categorys != null?
+            var pageNumber = page ?? 1;
+
+            var caregoryString = HttpContext.Session.GetString("category");
+
+            var catFromSort = (caregoryString != null) ? JsonConvert.DeserializeObject<List<Category>>(caregoryString) : _categoryRepository._context.Categorys.ToList();
+
+
+
+       /*     var listCategory = await _categoryRepository.ModelAllAsync();*/
+            IPagedList<Category> categories = catFromSort .ToPagedList(pageNumber,Setting.Pages);
+
+           /* ViewBag.Category = new SelectList(
+        _categoryRepository._context.Categorys.ToList(), "Id", "Name");
+            ViewBag.SelectedCat = catId.ToString();*/
+
+
+
+            return categories != null?
       
-             View(t):
+             View(categories) :
                            Problem("Entity set 'AppDbContent.Categorys'  is null.");
                         
             }
@@ -91,7 +107,7 @@ namespace ShopCar.Controllers
 
             Log.LogInformation($"Create {DateTime.Now.ToString("d")} {this.GetType().Name} {value}");
       
-            return View(category);
+            return RedirectToAction("Index");
             }
 
         // GET: Categories/Edit/5
@@ -158,7 +174,7 @@ namespace ShopCar.Controllers
 
 
 
-            return View(category);
+            return RedirectToAction("Index");
             }
 
         // GET: Categories/Delete/5
@@ -203,8 +219,15 @@ namespace ShopCar.Controllers
             {
             var categories = _categoryRepository._context.Categorys;
             ICollection<Category> categoriessort = categories.MySorting(str, asc);
-            ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
-            return View("Index", categoriessort);
+          /*  ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
+
+           
+            IPagedList<Category> categoriesnew = categoriessort.ToPagedList(1, Setting.PagesSort);*/
+
+            HttpContext.Session.SetString("category", JsonConvert.SerializeObject(categoriessort));
+
+
+            return RedirectToAction("Index");
             }
         }
     }

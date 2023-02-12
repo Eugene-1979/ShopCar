@@ -36,7 +36,8 @@
                 @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
                 <td>
-                    @Html.Raw(item.Product.About)
+                    <p><a href="/Products/Details?id=@item.Product.Id"> @Html.Raw(item.Product.About)        </a></p>
+                 @*   @Html.Raw(item.Product.About)*@
                 </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.Sale)

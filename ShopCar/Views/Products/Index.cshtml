@@ -1,9 +1,10 @@
 ﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList;
 @model IEnumerable<ShopCar.Models.Product>
-@*@using X.PagedList.Mvc.Bootstrap4.Core;*@
+
 @{
     ViewData["Title"] = "Index";
+   
 }
 
 <h1>Index</h1>
@@ -41,10 +42,15 @@
 
 
 
-@*<select  name="SelectCategory">
+<select class="form-select"  id="SelectCategory" name="Products">
+
+
+    
+
+
 
     <option value="0">All </option>
-    @foreach(var item in ViewBag.Category)
+    @foreach(var item in @ViewBag.Category)
         {
         if(ViewBag.SelectedCat == item.Value)
 
@@ -57,20 +63,17 @@
             }
         }
 
-    )
-</select>*@
+    
+    
+
+
+</select>
 
 
 
 
 
-<div class="row">
 
-    <div class="col-md-12">
-        @* @Html.PagedListPager((IPagedList)ViewBag.products,page=>Url.Action("Index1","Products",new{page=page})/*, Bootstrap4PagedListRenderOptions.ClassicPlusFirstAndLast*/)*@
-        @* <pager class="pager-container" list="@Model" options="@PagedListRenderOptions.TwitterBootstrapPager" asp-action="Index1" asp-controller="Products" />*@
-    </div>
-</div>
 
 <table class="table sorting d-grid " id="pages">
     <thead>
@@ -88,7 +91,7 @@
                 <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Sale" asp-route-asc="false">Desc</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.CategoryId)
                 <br>
                 <a class="btn btn-success" asp-action="Sorting" asp-route-str="Category" asp-route-asc="true">Asc</a>
                 <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Category" asp-route-asc="false">Desc</a>
@@ -106,49 +109,58 @@
                 <a class="btn btn-secondary" asp-action="Sorting" asp-route-str="Reviews" asp-route-asc="false">Desc</a>
 
             </th>
-           
+            <th>
+                @Html.DisplayNameFor(model => model.Photos)
+            </th>
+
         </tr>
     </thead>
     <tbody>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@foreach (var item in Model) {
-        <tr id="id_@item.Id" class="@item.Name">
+        @foreach(var item in Model)
+            {
+            <tr id="id_@item.Id" class="@item.Name">
             <td>
-                                        <span class="ui-icon ui-icon-disk">  </span>                
 
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a href="/Products/Details?id=@item.Id">
+                        <span class="ui-icon ui-icon-disk">  </span>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
+                    
+                  
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Sale)
-            </td>
+                 
+                    @Html.DisplayFor(modelItem => item.Sale)
+
+                </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
+                
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+
+
+                </td>
             <td>
-                @Html.Raw(item.About)
+                    <p><a  href="/Products/Details?id=@item.Id"> @Html.Raw(item.About)        </a></p>
+                    
             </td>
                
             <td>
                 @Html.Raw(item.Reviews)
             </td>
-            
-            
             <td>
+                    @if (item.Photos != null)
+                        {
+
+                        <img id="Userpic" class="pull-right" style="margin-bottom: 7px" width="120" height="70" src="\Content\Products\@item.Name\@item.Photos" />
+                        }
+
+                  
+
+            </td>
+
+                <td style="display: inline-block">
 
                     @if(ViewBag.Hidding)
                         {
@@ -169,9 +181,16 @@
            
 
             </td>
+            
         </tr>
 }
-      
+        <div class="row">
+
+            <div class="col-md-12">
+                @Html.PagedListPager((IPagedList)Model,page=>Url.Action("Index","Products",new{page=page}), X.PagedList.Mvc.Bootstrap4.Core.Bootstrap4PagedListRenderOptions.ClassicPlusFirstAndLast)
+            
+            </div>
+        </div>
 
     </tbody>
 </table>

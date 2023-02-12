@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+     a > p > img 
+    {
+    height:300px;
+    width:300px;
+    
+    }

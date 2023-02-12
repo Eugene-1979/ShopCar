@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ShopCar.Models.Employee>
+﻿@using X.PagedList.Mvc.Core;
+@model IEnumerable<ShopCar.Models.Employee>
 
 @{
     ViewData["Title"] = "Employee";
@@ -13,7 +14,7 @@
         <div class="inputbtn-group mb-3" style="display:flex">
             <div class="input-group-text">
 
-                <a class="btn btn-primary" entity="Employees" id="newcata" asp-action="Create">Create New Product</a>
+                <a class="btn btn-primary" entity="Employees" id="newcata" asp-action="Create">Create New Employee</a>
                 <span class="ajax-text">
 
                     <img src="~/content/ajax-loader.gif" height="50" />
@@ -100,5 +101,12 @@
             </td>
         </tr>
 }
+        <div class="row">
+
+            <div class="col-md-12">
+                @Html.PagedListPager((X.PagedList.IPagedList)Model,page=>Url.Action("Index","Employees",new{page=page}), X.PagedList.Mvc.Bootstrap4.Core.Bootstrap4PagedListRenderOptions.ClassicPlusFirstAndLast)
+
+            </div>
+        </div>
     </tbody>
 </table>

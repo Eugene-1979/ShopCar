@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ShopCar.Models.Order>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<ShopCar.Models.Order>
 
 @{
     ViewData["Title"] = "Order";
@@ -13,7 +15,7 @@
         <div class="inputbtn-group mb-3" style="display:flex">
             <div class="input-group-text">
 
-                <a class="btn btn-primary" entity="Orders" id="newcata" asp-action="Create">Create New Product</a>
+                <a class="btn btn-primary" entity="Orders" id="newcata" asp-action="Create">Create New Order</a>
                 <span class="ajax-text">
 
                     <img src="~/content/ajax-loader.gif" height="50" />
@@ -38,8 +40,25 @@
     }
 
 
+  <h2>Select Employee</h2>
+<select class="form-select" id="SelectCategory" name="Orders">
 
+    <option value="0">All </option>
+    @foreach(var item in ViewBag.Category)
+        {
+        if(ViewBag.SelectedCat == item.Value)
 
+            {
+            <option selected="selected" value="@item.Value"> @item.Text  </option>
+            }
+        else
+            {
+            <option value="@item.Value"> @item.Text </option>
+            }
+        }
+
+    )
+</select>
 
 
 
@@ -103,5 +122,13 @@
             </td>
         </tr>
 }
+
+        <div class="row">
+
+            <div class="col-md-12">
+                @Html.PagedListPager((IPagedList)Model,page=>Url.Action("Index","Orders",new{page=page}), X.PagedList.Mvc.Bootstrap4.Core.Bootstrap4PagedListRenderOptions.ClassicPlusFirstAndLast)
+
+            </div>
+        </div>
     </tbody>
 </table>

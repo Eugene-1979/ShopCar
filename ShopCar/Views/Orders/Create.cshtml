@@ -36,7 +36,7 @@
                 <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
             </div>
         <dd class="col-sm-10">
-                @await Html.PartialAsync("ViewProducts",(List<Product>)ViewBag.Products)
+               @* @await Html.PartialAsync("ViewProducts",(List<Product>)ViewBag.Products)*@
         </dd>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
