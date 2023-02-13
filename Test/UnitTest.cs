@@ -18,11 +18,20 @@ namespace ShopCar.ShopCar.TestX
 
         public UnitTest()
             {
-            var data = new List<Product>
+          
+
+            }
+
+
+
+        [Fact]
+        public void GetAllproducts_orders_by_name()
             {
+            var data = new List<Product>
+            {new Product { Name = "AAA" },
                 new Product { Name = "BBB" },
                 new Product { Name = "ZZZ" },
-                new Product { Name = "AAA" },
+                
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<Product>>();
@@ -34,18 +43,10 @@ namespace ShopCar.ShopCar.TestX
             var mockContext = new Mock<AppDbContent>();
             mockContext.Setup(c => c.Products).Returns(mockSet.Object);
 
-             service = new ProductRepository(mockContext.Object);
+            service = new ProductRepository(mockContext.Object);
 
-            }
-
-
-
-                [Fact]
-        public void GetAllproducts_orders_by_name()
-            {
-          
             var products = service.GetAllProducts();
-            
+
             Assert.Equal(3, products.Count);
             Assert.Equal("AAA", products[0].Name);
             Assert.Equal("BBB", products[1].Name);
