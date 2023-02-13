@@ -27,3 +27,11 @@ body {
     width:300px;
     
     }
+tr > th > input, tr > th>button[but="ok"]{
+    visibility: hidden;
+
+}
+body > header > nav > div > div > ul.navbar-nav.flex-grow-1 > li > a {
+
+margin:5px;
+}

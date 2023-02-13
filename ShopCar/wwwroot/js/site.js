@@ -18,6 +18,8 @@ $(function () {
     });
 
 
+
+
     $("#SelectCategory").on("change", function () {
         var url = $(this).val();
         if (url) {
@@ -73,6 +75,26 @@ $(function () {
 };
 */
 
+    $("tr>th>button[but=by]").click(function () {
+        var inp = $(this).parent().next().children();
+        inp.css("visibility", "visible");
+        var ok = inp.parent().next().children();
+        ok.css("visibility", "visible");
+        $(this).css("visibility", "hidden")
 
+        ok.click(function ()
+        {
+            var product = inp.attr("but");
+           var val = inp.val();
+            /*  $.session(set)(butId, value);*/
+            /*CreateSession*/
+            $.post("/Orders/CreateSession", { product: product, val: val },function (data) { });
+
+            $(this).css("visibility","hidden");
+            inp.css("visibility", "hidden");
+        }
+        )
+
+    })
 
 });

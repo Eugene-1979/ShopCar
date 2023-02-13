@@ -21,7 +21,10 @@ namespace ShopCar.Repository
             await _context.SaveChangesAsync();
             }
 
-      async  public Task<IEnumerable<Order>> ModelAllAsync()=>await _context.Orders.Include(o => o.Customer).Include(o => o.Employee).ToListAsync();
+      async  public Task<IEnumerable<Order>> ModelAllAsync()=>await _context.Orders.
+   /*   Include(o => o.Customer).
+      Include(o => o.Employee).*/
+      ToListAsync();
            
 
       async  public Task ModelDeleteAsync(Order model)

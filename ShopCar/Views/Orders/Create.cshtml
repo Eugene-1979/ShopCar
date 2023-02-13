@@ -1,4 +1,5 @@
-﻿@model ShopCar.Models.Order
+﻿@using ShopCar.Db
+@model ShopCar.Models.Order
 
 @{
     ViewData["Title"] = "Create";
@@ -18,6 +19,37 @@
     </div>
 
     }
+
+<table>
+    <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Sale</th>
+            <th>Reviews</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach(var item in ViewBag.orders)
+            {
+<tr>
+    <td>@Html.Raw(@item.Key.About)</td>
+                <td>@item.Key.Sale</td>
+                <td>@item.Key.Reviews</td>
+                <td>@item.Value</td>
+
+</tr>
+
+            }
+
+    </tbody>
+
+
+</table>
+
+
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -32,8 +64,23 @@
                 <span asp-validation-for="MyDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CustomerId" class="control-label"></label>
-                <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+                <h6> Name</h6>
+                <label name="Name" class="control-label"></label>
+                <input name="Name" class="form-control" />
+              @*  <span asp-validation-for="Name" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <h6> Email</h6>
+               
+                <label name="Email" class="control-label"></label>
+                <input name="Email" class="form-control" />
+            @*    <span asp-validation-for="Email" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <h6> Phone</h6>
+                <label name="Phone" class="control-label"></label>
+                <input name="Phone" class="form-control" />
+          @*      <span asp-validation-for="Phone" class="text-danger"></span>*@
             </div>
         <dd class="col-sm-10">
                @* @await Html.PartialAsync("ViewProducts",(List<Product>)ViewBag.Products)*@

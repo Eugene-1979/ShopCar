@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ShopCar.Db;
 using ShopCar.Models;
 using ShopCar.MyUtils;
@@ -30,8 +32,22 @@ namespace ShopCar.Controllers
 
             var pageNumber = page ?? 1;
 
+           /* var qw = HttpContext.Session.GetString("order");
 
-            var listProd = (await _orderRepository.ModelAllAsync()).
+            var prodFromSort = (qw != null) ? JsonConvert.DeserializeObject<List<Order>>(qw) : _orderRepository._context.Orders.ToList();*/
+
+
+
+
+
+
+
+
+            var listProd = _orderRepository._context.Orders.
+            Include(q => q.Customer).Include(q => q.Employee).
+
+            ToList().
+
             Where(q => catId == null || catId == 0 || q.EmployeeId == catId).ToList();
 
             ViewBag.Category = new SelectList(
@@ -77,6 +93,24 @@ namespace ShopCar.Controllers
             ViewData["EmployeeId"] = new SelectList(_orderRepository._context.Employees, "Id", "Name");
             ViewBag.Products = _orderRepository._context.Products.Include(q=>q.Category).ToList();
             ViewBag.q = new List<int>() { 1, 2 };
+
+
+            var enrollString = HttpContext.Session.GetString("Cart");
+          var ttt=   (enrollString != null) ? JsonConvert.DeserializeObject<Dictionary<int, int>>(enrollString) : new Dictionary<int, int>();
+            Dictionary<Product, int> super = new();
+
+var pppp=_orderRepository._context.Products.ToList();
+            foreach(var item in ttt)
+                {
+                Product pr = pppp.FirstOrDefault(q => q.Id == item.Key);
+
+                super.Add(pr, item.Value);
+                }
+
+
+
+
+            ViewBag.orders = super;
             return View();
         }
 
@@ -84,20 +118,64 @@ namespace ShopCar.Controllers
 
         [HttpPost]
      /*   [ValidateAntiForgeryToken]*/
-        public async Task<IActionResult> Create([Bind("Id,EmployeeId,MyDate,CustomerId")] Order order)
+        public async Task<IActionResult> Create(/*[Bind("Id,EmployeeId,MyDate,CustomerId")] Order order*/IFormCollection colProp)
         {
+
+
+            string nameCustomer = colProp["Name"];
+            string phoneCustomer = colProp["Phone"];
+            string emailCustomer = colProp["Email"];
+            Customer customer = new (){ Name = nameCustomer, Email = emailCustomer, Phone = phoneCustomer };
+
+
+            Order order = new()
+                {
+                Customer = customer,
+
+                EmployeeId = int.Parse(colProp["EmployeeId"]),
+                MyDate = DateTime.Parse(colProp["MyDate"])
+
+          
+                };
+          
+            var enrollString = HttpContext.Session.GetString("Cart");
+
+            var custFromSort = (enrollString != null) ? JsonConvert.DeserializeObject<Dictionary<int,int>>(enrollString) : new Dictionary<int, int>();
+
+
+            List<Enrollment> tempEnr = new List<Enrollment>();
+
+            foreach(var item in custFromSort)
+                {
+                Enrollment ent = new() { ProductId = item.Key, Count = item.Value, Order = order };
+                tempEnr.Add(ent);  
+                
+                }
+
+
+            order.Enrollments = tempEnr;
+
+
+
+            HttpContext.Session.Remove("Cart");
+
 
             ModelState.Remove(nameof(Customer));
             ModelState.Remove(nameof(Employee));
 
-            if (ModelState.IsValid)
-            {
+            if(/*ModelState.IsValid*/true)
+                {
 
                 await _orderRepository.ModelAddAsync(order);
                 return RedirectToAction(nameof(Index));
-            }
-/*            ViewData["CustomerId"] = new SelectList(_orderRepository._context.Customers, "Id", "Name", order.CustomerId);
-            ViewData["EmployeeId"] = new SelectList(_orderRepository._context.Employees, "Id", "Email", order.EmployeeId);*/
+                }
+
+
+
+
+
+            /*            ViewData["CustomerId"] = new SelectList(_orderRepository._context.Customers, "Id", "Name", order.CustomerId);
+                        ViewData["EmployeeId"] = new SelectList(_orderRepository._context.Employees, "Id", "Email", order.EmployeeId);*/
             return View(/*order*/);
         }
 
@@ -205,16 +283,19 @@ namespace ShopCar.Controllers
                 }
 
 
-            var orders= _orderRepository._context.Orders
-            .Include(q=>q.Customer).Include(q=>q.Employee);
-            ICollection<Order> ordersort = orders.MySorting(str, asc);      
-            ViewBag.Hidding= ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
+            var orders = _orderRepository._context.Orders
+            .Include(q => q.Customer).Include(q => q.Employee);
+            ICollection<Order> ordersort = orders.MySorting(str, asc);
 
 
-           
+
+            ViewBag.Hidding = ((User.IsInRole("Admin") || User.IsInRole("Moderator")));
 
 
-       
+
+
+
+
 
             ViewBag.Category = new SelectList(
             _orderRepository._context.Employees.ToList(), "Id", "Name");
@@ -223,13 +304,33 @@ namespace ShopCar.Controllers
             IPagedList<Order> products = ordersort.ToPagedList(1, Setting.PagesSort);
             ViewBag.products = products;
 
+            /*  HttpContext.Session.SetString("order", JsonConvert.SerializeObject(ordersort));
+
+              return RedirectToAction("Index");*/
+
+            return View("Index", products);
+            }
 
 
 
+                [HttpPost]
+        public void CreateSession(string product,string val) {
+       
+        bool parseBoolId= int.TryParse(product,out int parseProduct);
+        bool parseBoolVal= int.TryParse(val,out int parseVal);
 
-            return  View("Index", products);
+            if(parseBoolId && parseBoolVal)
+                {
+                var stringCart = HttpContext.Session.GetString("Cart");
+                var cartDict = (stringCart != null) ? JsonConvert.DeserializeObject<Dictionary<int, int>>(stringCart) : new Dictionary<int, int>();
+                cartDict.Add(parseProduct, parseVal);
+                HttpContext.Session.SetString("Cart", JsonConvert.SerializeObject(cartDict));
+
                 }
 
+
+
+        }
 
     }
 }

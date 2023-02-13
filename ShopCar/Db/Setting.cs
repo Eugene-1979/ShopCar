@@ -10,9 +10,9 @@
 
         public const int category = 15;
         public const int product = 10;
-        public const int empl = 20;
+        public const int empl = 5;
         public const int customer = 20;
-        public const int order = 20;
+        public const int order = 5;
 
 
        public const string rootProd = "wwwroot\\Content\\Products\\";

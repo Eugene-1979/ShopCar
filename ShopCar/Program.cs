@@ -134,14 +134,14 @@ using(var scope = app.Services.CreateScope())
 
    /* if(true) { DbObjects.Initial(context); }*/
 
-    /*   context.Products.RemoveRange(context.Products);
-       context.Categorys.RemoveRange(context.Categorys);
-       context.Customers.RemoveRange(context.Customers);
-       context.Employees.RemoveRange(context.Employees);
-       context.Orders.RemoveRange(context.Orders);
-       context.Enrollment.RemoveRange(context.Enrollment);
+    /*    context.Products.RemoveRange(context.Products);
+        context.Categorys.RemoveRange(context.Categorys);
+        context.Customers.RemoveRange(context.Customers);
+        context.Employees.RemoveRange(context.Employees);
+        context.Orders.RemoveRange(context.Orders);
+        context.Enrollment.RemoveRange(context.Enrollment);
 
-       context.SaveChanges();*/
+        context.SaveChanges();*/
     }
 
 app.Run();

@@ -112,7 +112,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Photos)
             </th>
-
+           
         </tr>
     </thead>
     <tbody>
@@ -123,10 +123,10 @@
             <tr id="id_@item.Id" class="@item.Name">
             <td>
 
-                    <a href="/Products/Details?id=@item.Id">
+                 
                         <span class="ui-icon ui-icon-disk">  </span>
                         @Html.DisplayFor(modelItem => item.Name)
-                    </a>
+                    
                     
                   
             </td>
@@ -159,6 +159,16 @@
                   
 
             </td>
+
+
+               @* @if (!ViewBag.Hidding)
+                    {*@
+
+                    <th><button but="by" class="btn btn-primary">By</button></th>
+                    <th> <input but=@item.Id type="number" style="" min="0" max="10000">   </th>
+                    <th><button but="ok" @*id="@item.Id"*@ class="btn btn-success">Ok</button></th>
+                   @* }*@
+
 
                 <td style="display: inline-block">
 
